@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Untitled Document</title>
+	<script type="text/javascript">
+	(function () {
+function MetricsCtrl($scope,$firebaseArray, Metric) {
+    var firebaseRef = new Firebase("https://bloc-jams.firebaseio.com/");
+
+    $scope.options = {...};
+
+    var blue = $firebaseArray(firebaseRef.child('Songs').orderByChild('name').equalTo("Blue"))
+    var green = $firebaseArray(firebaseRef.child('Songs').orderByChild('name').equalTo("Green"))
+    var red = $firebaseArray(firebaseRef.child('Songs').orderByChild('name').equalTo("Red"))
+    var pink = $firebaseArray(firebaseRef.child('Songs').orderByChild('name').equalTo("Pink"))
+    var magenta = $firebaseArray(firebaseRef.child('Songs').orderByChild('name').equalTo("Magenta"))
+
+    $scope.data = [
+        {
+            values: {
+                {
+                    "label" : "Blue" ,
+                    "value" :  blue.length
+                } ,
+                {
+                    "label" : "Green" ,
+                    "value" : green.length
+                } ,
+                {
+                    "label" : "Red" ,
+                    "value" : red.length
+                } ,
+                {
+                    "label" : "Pink" ,
+                    "value" : pink.length
+                } ,
+                {
+                    "label" : "Magenta" ,
+                    "value" : magenta.length
+                }
+}
+        }
+    ]
+}
+
+angular
+    .module('blocJams')
+    .controller('MetricsCtrl', ['$scope','$firebaseArray','Metric', MetricsCtrl]);
+})();
+
+	
+	</script>
+	<script type="text/javascript">
+	$q.all([ blue.$loaded(), 
+         green.$loaded(), 
+         red.$loaded(), 
+         pink.$loaded(), 
+         magenta.$loaded()
+]).then(makeChart)
+
+function makeChart(data) {
+  // data[0] is blue, data[1] is green, etc.
+  // ...
+  // $scope.data = [{...}]
+}
+
+	</script>
+</head>
+
+<body>
+</body>
+</html>

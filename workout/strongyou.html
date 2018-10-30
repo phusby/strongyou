@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Firebase JS read and write</title>
+	
+<script src="https://www.gstatic.com/firebasejs/5.5.6/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyC28x6Wb1oW9-8GddWYTYgh-gZQt5dkED0",
+    authDomain: "strongyou-38a32.firebaseapp.com",
+    databaseURL: "https://strongyou-38a32.firebaseio.com",
+    projectId: "strongyou-38a32",
+    storageBucket: "strongyou-38a32.appspot.com",
+    messagingSenderId: "2029204053"
+  };
+  firebase.initializeApp(config);
+</script>
+</head>
+
+<body>
+	<h2>All players and scores:</h2>
+	<pre id="output"></pre>
+	<hr>
+	<form>
+		<input type="text" id="reps" placeholder="reps..." required>
+		<input type="text" id="kg" placeholder="kg..." required>
+		<button type="submit" id="submit">Create new player</button>
+	</form>
+	
+	
+	
+	<script>
+	var database = firebase.database();
+		var submitButton = document.getElementById('submit');
+		submitButton.addEventListener('click', createWorkout)
+	//read from database
+	database.ref('workout/').once('value', function(snapshot) {
+   		snapshot.forEach(function (childSnap) {
+			// storing all keys (i.e. "player1", "player2", ... )
+			let allWorkouts = childSnap.child('reps').val();
+			// storing all values of the child node "score"
+			let allScores = childSnap.child('kg').val();
+  			console.log(allScores);
+			// rendering the keys and values
+			document.getElementById('output').innerHTML += allWorkouts + ': ' + allScores + '<br>';
+ 		});
+  });
+	//write to database
+	function createWorkout (){
+		var reps = document.getElementById('reps').value;
+		var kg = document.getElementById('kg').value;
+		var workoutData = {
+			"reps" : reps, 
+			"kg" : kg
+		}
+		var newWorkout = database.ref('workout/').push().key;
+		database.ref('workout/' + newWorkout).update(workoutData);
+	}
+		
+	</script>
+
+</body>
+</html>
